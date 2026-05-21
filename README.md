@@ -43,9 +43,13 @@ The project uses real-time hand tracking and gesture recognition to perform mous
 5. The system performs the required operation on the computer.
 
 ---
-
+## Screenshots
 ![Screenshot 2025-11-10 153630.png](Screenshot%202025-11-10%20153630.png)
-
+![Screenshot 2025-11-10 153700.png](Screenshot%202025-11-10%20153700.png)
+![Screenshot 2025-11-10 153726.png](Screenshot%202025-11-10%20153726.png)
+![Screenshot 2025-11-10 153751.png](Screenshot%202025-11-10%20153751.png)
+![Screenshot 2025-11-10 153811.png](Screenshot%202025-11-10%20153811.png)
+---
 ## Applications
 - Accessibility assistance
 - Touchless systems
