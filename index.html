@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Enhancing Accessibility with Gesture Controlled Virtual Input</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #fff;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Header */
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      transition: all 0.3s ease;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: white;
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: #ffd700;
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 120px 0 80px;
+      text-align: center;
+      color: white;
+    }
+
+    h1 {
+      color: white;              /* Pure white text */
+      text-shadow: none;         /* Removes any glow or shadow */
+      animation: none;           /* Disables any animation effects */
+      font-weight: 700;
+      white space:normal;
+    }
+
+
+    @keyframes glow {
+      from {
+        filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.3));
+      }
+      to {
+        filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.6));
+      }
+    }
+
+    .hero p {
+      font-size: 1.3rem;
+      margin-bottom: 2rem;
+      opacity: 0.9;
+    }
+
+    .cta-button {
+      display: inline-block;
+      padding: 15px 30px;
+      background: linear-gradient(45deg, #ff6b6b, #ffd700);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .cta-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Features Section */
+    .features {
+      padding: 80px 0;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      text-align: center;
+    }
+
+    .features h2 {
+      color: white;
+      font-size: 2.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .feature-card {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      padding: 2rem;
+      text-align: center;
+      color: white;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    .feature-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .feature-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(45deg, #ffd700, #ff6b6b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .feature-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    /* Technology Section */
+    .technology {
+      padding: 80px 0;
+      color: white;
+      text-align: center;
+    }
+
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .tech-item {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    .tech-item.visible {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .tech-logo {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 1rem;
+      background: linear-gradient(45deg, #ffd700, #ff6b6b);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+
+    /* Demo Section */
+    .demo {
+      padding: 80px 0;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      text-align: center;
+      color: white;
+    }
+
+    .demo-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 3rem;
+      margin-top: 3rem;
+    }
+
+    .demo-item {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 2rem;
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    .demo-item.visible {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .demo-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    }
+
+    .demo-video {
+      width: 100%;
+      height: 200px;
+      background: linear-gradient(45deg, #333, #555);
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      color: #ffd700;
+    }
+
+    /* Footer */
+    footer {
+      background: rgba(0, 0, 0, 0.3);
+      color: white;
+      text-align: center;
+      padding: 2rem 0;
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.3rem;
+      }
+
+      .nav-links {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="logo">GestureInput</div>
+      <ul class="nav-links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#technology">Technology</a></li>
+        <li><a href="#demo">Demo</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section id="home" class="hero">
+    <div class="container">
+      <h1>Enhancing Accessibility with <br>Gesture Controlled Virtual Input</h1>
+      <p>
+        Revolutionizing human-computer interaction through intuitive hand
+        gestures for mouse and keyboard control
+      </p>
+      <a href="#demo" class="cta-button">Explore Demo</a>
+    </div>
+  </section>
+
+  <section id="features" class="features">
+    <div class="container">
+      <h2>Key Features</h2>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🖱️</div>
+          <h3>Virtual Mouse Control</h3>
+          <p>
+            Navigate your cursor with natural hand movements. Point, click,
+            drag, and scroll using intuitive gestures detected through
+            computer vision.
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⌨️</div>
+          <h3>Gesture-Based Keyboard</h3>
+          <p>
+            Type without touching! Our virtual keyboard responds to finger
+            pointing and pinch gestures for contactless text input.
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">♿</div>
+          <h3>Accessibility Focus</h3>
+          <p>
+            Designed for users with mobility challenges, providing alternative
+            input methods that don't require physical contact.
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>Real-time Processing</h3>
+          <p>
+            Lightning-fast gesture recognition ensures smooth, responsive
+            experience with minimal latency.
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎯</div>
+          <h3>High Accuracy</h3>
+          <p>
+            Advanced ML algorithms ensure precise gesture detection and minimal
+            false positives.
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔧</div>
+          <h3>Customizable</h3>
+          <p>
+            Adjust sensitivity and gesture mappings to suit individual needs
+            and preferences.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="technology" class="technology">
+    <div class="container">
+      <h2>Technology Stack</h2>
+      <div class="tech-grid">
+        <div class="tech-item"><div class="tech-logo">🐍</div><h3>Python</h3><p>Core programming language</p></div>
+        <div class="tech-item"><div class="tech-logo">👁️</div><h3>OpenCV</h3><p>Real-time image processing</p></div>
+        <div class="tech-item"><div class="tech-logo">🤖</div><h3>MediaPipe</h3><p>Google’s gesture detection framework</p></div>
+        <div class="tech-item"><div class="tech-logo">🔢</div><h3>NumPy</h3><p>Efficient array operations</p></div>
+        <div class="tech-item"><div class="tech-logo">🖥️</div><h3>PyAutoGUI</h3><p>System control automation</p></div>
+        <div class="tech-item"><div class="tech-logo">🧠</div><h3>Machine Learning</h3><p>Gesture classification</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="demo" class="demo">
+    <div class="container">
+      <h2>Live Demonstrations</h2>
+      <div class="demo-container">
+        <div class="demo-item" data-action="mouse">
+          <div class="demo-video">🖱️</div>
+          <h3>Virtual Mouse</h3>
+          <p>Control cursor, click, scroll via gestures</p>
+          <ul style="text-align:left;margin-top:1rem">
+            <li>✓ Point finger – Move cursor</li>
+            <li>✓ Two fingers – Click</li>
+            <li>✓ Thumb + Index – Volume</li>
+            <li>✓ Palm/Fist – Scroll</li>
+          </ul>
+        </div>
+        <div class="demo-item" data-action="keyboard">
+          <div class="demo-video">⌨️</div>
+          <h3>Virtual Keyboard </h3>
+          <p>Contactless typing using gestures</p>
+          <ul style="text-align:left;margin-top:1rem">
+            <li>✓ Point – Select key</li>
+            <li>✓ Pinch – Type</li>
+            <li>✓ Special gestures – Commands</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer id="contact">
+    <div class="container">
+      <h2>Contact Information</h2>
+      <p>Interested in learning more?</p>
+      <div style="margin-top: 1rem">
+        <p>📧 gesture.input@project.com</p>
+        <p>🌐 github.com/gesture-input-project</p>
+        <p>📱 LinkedIn: /in/gesture-accessibility-research</p>
+      </div>
+      <p style="margin-top: 2rem; opacity: 0.7">
+        © 2024 Gesture Controlled Virtual Input Project
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    // Smooth scrolling
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener("click", function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute("href")).scrollIntoView({
+          behavior: "smooth",
+        });
+      });
+    });
+
+    // Header style on scroll
+    window.addEventListener("scroll", () => {
+      const header = document.querySelector("header");
+      header.style.background =
+        window.scrollY > 100
+          ? "rgba(255,255,255,0.2)"
+          : "rgba(255,255,255,0.1)";
+    });
+
+    // Fade-in visibility observer
+    const observer = new IntersectionObserver(
+      entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+
+    document
+      .querySelectorAll(".feature-card, .tech-item, .demo-item")
+      .forEach(el => observer.observe(el));
+
+    // Demo button click handler
+    document.addEventListener("DOMContentLoaded", () => {
+      document.querySelectorAll(".demo-item").forEach(item => {
+        item.addEventListener("click", () => {
+          const action = item.getAttribute("data-action");
+          let route = "";
+          if (action === "mouse") route = "/start_mouse";
+          if (action === "keyboard") route = "/start_keyboard";
+
+          if (route) {
+            fetch(route, { method: "POST" })
+              .then(res => res.json())
+              .then(data => alert(data.status))
+              .catch(() => alert("Server not running yet."));
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
