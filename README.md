@@ -44,6 +44,13 @@ The project uses real-time hand tracking and gesture recognition to perform mous
 
 ---
 
+## Screenshot
+
+![Project Screenshot] (Screenshot%2025-11-10%153630.png)
+![Project Screenshot] (Screenshot%202025-11-10%153700.png)
+
+
+
 ## Applications
 - Accessibility assistance
 - Touchless systems
